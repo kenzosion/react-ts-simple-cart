@@ -14,7 +14,7 @@ const Item: React.FC<Props> = ({ item, handleAddToCart }) => {
   const { image, title, description, price } = item;
   return (
     <Wrapper>
-      <img src={image} alt={title} />
+      <img src={image} alt={title} style={{ margin: 20 }}/>
       <div>
         <h3>{title}</h3>
         <p>{description}</p>
