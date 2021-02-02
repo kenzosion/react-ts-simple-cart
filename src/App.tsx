@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 // Components
 import Item from './Item/Item';
@@ -24,29 +24,52 @@ export type CartItemType = {
 const App = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([] as CartItemType[]);
+
   const fetchProducts = async (): Promise<CartItemType[]> => {
     const response = await fetch('https://fakestoreapi.com/products')
     const data = await response.json()
     return data
   };
   // await (await fetch('https://fakestoreapi.com/products')).json();
-  
+
   const { data, isLoading, error } = useQuery<CartItemType[]>(
     'products',
     fetchProducts
   );
   // console.log(data);
 
-  const getTotalItems = (items: CartItemType[]) => {
-
-  }
+  const getTotalItems = (items: CartItemType[]) =>
+    items.reduce((acc: number, item) => acc + item.amount, 0);
 
   const handleAddToCart = (addItem: CartItemType) => {
+    // console.log(addItem)
+    setCartItems(prev => {
+      // 1. Is the item already added in the cart?
+      const isItemInCart = prev.find(item => item.id === addItem.id);
 
+      if (isItemInCart) {
+        return prev.map(item =>
+          item.id === addItem.id
+            ? { ...item, amount: item.amount + 1 }
+            : item
+        );
+      }
+      // First time the item is added
+      return [...prev, { ...addItem, amount: 1 }];
+    });
   }
 
   const handleRemoveFromCart = (id: number) => {
-    
+    setCartItems(prev =>
+      prev.reduce((ack, item) => {
+        if (item.id === id) {
+          if (item.amount === 1) return ack;
+          return [...ack, { ...item, amount: item.amount - 1 }];
+        } else {
+          return [...ack, item];
+        }
+      }, [] as CartItemType[])
+    );
   }
 
   if (isLoading) return <LinearProgress />;
@@ -63,7 +86,7 @@ const App = () => {
       </Drawer>
       <h1>T-Shopping</h1>
       <StyledButton onClick={() => setCartOpen(true)}>
-        <Badge color='error'>
+        <Badge badgeContent={getTotalItems(cartItems)} color='error'>
           <AddShoppingCartIcon style={{ color: 'black', fontSize: 40 }} />
         </Badge>
       </StyledButton>
