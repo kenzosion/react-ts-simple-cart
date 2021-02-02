@@ -11,6 +11,8 @@ export const Wrapper = styled.div`
 
   button {
     border-radius: 0 0 20px 20px;
+    background: #b3b3b3;
+    font-weight: 900;
   }
 
   img {

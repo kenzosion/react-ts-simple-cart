@@ -17,7 +17,7 @@ const Item: React.FC<Props> = ({ item, handleAddToCart }) => {
       <img src={image} alt={title} style={{ margin: 20 }}/>
       <div>
         <h3>{title}</h3>
-        <p>{description}</p>
+        <p>{description.substring(0, 200)}</p>
         <h3>£{price}</h3>
       </div>
       <Button onClick={() => handleAddToCart(item)}>Add to cart</Button>
