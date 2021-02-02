@@ -21,57 +21,20 @@ export type CartItemType = {
   amount: number;
 };
 
+const fetchProducts = async (): Promise<CartItemType[]> =>
+  await (await fetch('https://fakestoreapi.com/products')).json();
+
 const App = () => {
-  const fetchProducts = async (): Promise<CartItemType[]> => {
-    const response = await fetch('https://fakestoreapi.com/products')
-    const data = await response.json()
-    return data
-  };
-  // await (await fetch('https://fakestoreapi.com/products')).json();
-  
   const { data, isLoading, error } = useQuery<CartItemType[]>(
     'products',
     fetchProducts
   );
-  // console.log(data);
-
-  const getTotalItems = (items: CartItemType[]) => {
-
-  }
-
-  const handleAddToCart = (addItem: CartItemType) => {
-
-  }
-
-  const handleRemoveFromCart = (id: number) => {
-    
-  }
-
-  if (isLoading) return <LinearProgress />;
-  if (error) return <div>Something went wrong ...</div>;
+  console.log(data); 
 
   return (
-    <Wrapper>
-      {/* <Drawer anchor='right' >
-        <Cart
-          cartItems={cartItems}
-          addToCart={handleAddToCart}
-          removeFromCart={handleRemoveFromCart}
-        />
-      </Drawer>
-      <StyledButton onClick={() => setCartOpen(true)}>
-        <Badge badgeContent={getTotalItems(cartItems)} color='error'>
-          <AddShoppingCartIcon />
-        </Badge>
-      </StyledButton> */}
-      <Grid container spacing={3}>
-        {data?.map(item => (
-          <Grid item key={item.id} xs={12} sm={4}>
-            <Item item={item} handleAddToCart={handleAddToCart} />
-          </Grid>
-        ))}
-      </Grid>
-    </Wrapper>
+    <div className="App">
+      App
+    </div>
   );
 }
 
